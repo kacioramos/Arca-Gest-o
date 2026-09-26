@@ -1,0 +1,10 @@
+ARCA GESTÃO — V11
+
+Versão com visual profissional, identidade visual fixa e modos claro/escuro.
+
+- Tipografia: sistema/Inter, sem fontes Formula 1.
+- Personalização avançada removida da interface.
+- Tema claro e escuro com preferência salva no navegador.
+- Mantidas as funções de alunos, responsáveis, mensalidades, histórico, comprovantes e backup/restauração.
+
+Para usar, abra index.html em um navegador moderno.

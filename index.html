@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b2239" id="themeColor"><title>Arca Gestão • Creche</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="toast" class="toast"></div>
+<div class="app-shell">
+<header class="topbar">
+  <div class="brand-wrap"><div class="brand-mark" aria-hidden="true"><span>⛵</span></div><div><div class="brand">Arca <span>Gestão</span></div><div class="sub">Gestão simples e organizada para sua creche</div></div></div>
+  <div class="head-actions"><button class="btn light theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">☾ Escuro</button><button class="btn light" id="backup">↓ Backup</button><label class="btn light">↑ Restaurar<input id="restore" type="file" accept=".json"></label></div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="side-title">MENU PRINCIPAL</div>
+  <button class="nav active" data-page="home"><span>⌂</span> Dashboard</button>
+  <button class="nav" data-page="students"><span>♙</span> Alunos</button>
+  <button class="nav" data-page="months"><span>R$</span> Mensalidades</button>
+  <button class="nav" data-page="backup"><span>↕</span> Backup</button>
+  <div class="side-note"><b>Dados locais</b><small>As informações ficam neste computador. Faça backups regularmente.</small></div>
+</aside>
+<main>
+<section id="page-home" class="page active">
+ <div class="head"><div><span class="eyebrow">ARCA DE NOÉ • VISÃO GERAL</span><h1>Dashboard</h1><p>Acompanhe os pagamentos e pendências do mês.</p></div></div>
+ <div class="month-bar month-selector"><div class="month-ref"><span>REFERÊNCIA DO DASHBOARD</span><strong id="homeMonthTitle">—</strong><small>Esta é a referência central usada em Mensalidades.</small></div><div class="month-controls"><label><span>Mês</span><select id="homeMonthMonth"><option value="01">Janeiro</option><option value="02">Fevereiro</option><option value="03">Março</option><option value="04">Abril</option><option value="05">Maio</option><option value="06">Junho</option><option value="07">Julho</option><option value="08">Agosto</option><option value="09">Setembro</option><option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option></select></label><label><span>Ano</span><select id="homeMonthYear"></select></label></div></div>
+ <div class="cards">
+  <div class="card"><div class="card-icon blue-bg">♙</div><div><small>Total de alunos</small><b id="totalStudents">0</b><em>cadastrados</em></div></div>
+  <div class="card"><div class="card-icon green-bg">✓</div><div><small>Pagos no mês</small><b id="paidCount">0</b><em id="paidPercent">0% da turma</em></div></div>
+  <div class="card"><div class="card-icon red-bg">!</div><div><small>Não pagos</small><b id="pendingCount">0</b><em>pendências</em></div></div>
+  <div class="card"><div class="card-icon cyan-bg">R$</div><div><small>Valor recebido</small><b id="received">R$ 0,00</b><em id="averagePayment">média: R$ 0,00</em></div></div>
+ </div>
+ <div class="dashboard-grid">
+   <div class="panel collection-panel"><div class="panel-head"><div><h2>Progresso do mês</h2><p class="panel-sub">Acompanhe quanto da turma já foi regularizado.</p></div><strong id="collectionRate">0%</strong></div><div class="progress-track"><div id="collectionProgress" class="progress-fill"></div></div><div class="progress-meta"><span id="progressPaid">0 pagos</span><span id="progressPending">0 pendentes</span></div></div>
+   <div class="panel quick-panel"><div class="panel-head"><div><h2>Ações rápidas</h2><p class="panel-sub">Acesse as tarefas mais usadas.</p></div></div><div class="quick-actions"><button class="quick-action" id="quickPayment"><span>R$</span><div><b>Registrar pagamento</b><small>Marcar mensalidade como paga</small></div></button><button class="quick-action" id="quickBackup"><span>↓</span><div><b>Fazer backup</b><small>Salvar uma cópia dos dados</small></div></button></div></div>
+ </div>
+ <div class="panel"><div class="panel-head"><div><h2>Resumo dos alunos</h2><p class="panel-sub">Situação da mensalidade na referência selecionada.</p></div></div><div id="homeList" class="home-list"></div></div>
+</section>
+
+<section id="page-students" class="page">
+ <div class="head"><div><span class="eyebrow">CADASTRO</span><h1>Alunos</h1><p>Gerencie alunos e todos os responsáveis vinculados.</p></div><button class="btn primary" id="addStudent2">+ Novo aluno</button></div>
+ <div class="panel"><div class="list-toolbar"><div class="search-wrap"><span>⌕</span><input class="search" id="studentSearch" placeholder="Pesquisar por aluno, responsável ou telefone"></div><div class="result-count" id="studentCount">0 alunos</div></div><div class="student-grid" id="studentGrid"></div><div id="emptyStudents" class="empty hidden">Nenhum aluno encontrado.</div></div>
+</section>
+
+<section id="page-months" class="page">
+ <div class="head months-head"><div><span class="eyebrow">FINANCEIRO</span><h1>Mensalidades</h1><p>Consulte e acompanhe os pagamentos da turma por período.</p></div><div class="reference-badge"><span>REFERÊNCIA ATUAL</span><strong id="monthsReferenceBadge">—</strong><small>Sincronizada com o Dashboard</small></div></div>
+ <div class="panel billing-toolbar">
+   <div class="billing-block period-block">
+     <div class="billing-label"><span class="billing-icon">◷</span><div><b>Período</b><small>Selecione a competência</small></div></div>
+     <div class="period-controls">
+       <label><span>Mês</span><select id="monthViewMonth"><option value="01">Janeiro</option><option value="02">Fevereiro</option><option value="03">Março</option><option value="04">Abril</option><option value="05">Maio</option><option value="06">Junho</option><option value="07">Julho</option><option value="08">Agosto</option><option value="09">Setembro</option><option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option></select></label>
+       <label><span>Ano</span><select id="monthViewYear"></select></label>
+     </div>
+   </div>
+   <div class="billing-divider"></div>
+   <label class="status-filter"><span>Status</span><select id="paymentFilter"><option value="all">Todos</option><option value="paid">Pagos</option><option value="unpaid">Não pagos</option></select></label>
+   <label class="filter-search"><span>Pesquisar aluno ou responsável</span><input id="paymentSearch" placeholder="Digite um nome ou telefone"></label>
+ </div>
+ <div class="panel table-panel">
+   <div class="table-panel-head"><div><h2>Controle de pagamentos</h2><p class="panel-sub">Confira quem já pagou, valores e comprovantes.</p></div><span class="table-live">● Atualizado automaticamente</span></div>
+   <div class="table-wrap"><table><thead><tr><th>Aluno</th><th>Responsável</th><th>Telefone</th><th>Valor</th><th>Data</th><th>Status</th><th>Comprovante</th><th></th></tr></thead><tbody id="monthTable"></tbody></table><div id="emptyMonth" class="empty hidden">Nenhum aluno encontrado para este filtro.</div></div>
+ </div>
+</section>
+
+<section id="page-backup" class="page">
+ <div class="head"><div><span class="eyebrow">SEGURANÇA DOS DADOS</span><h1>Backup e restauração</h1><p>Proteja os cadastros, pagamentos e comprovantes armazenados neste computador.</p></div></div>
+ <div class="backup-grid">
+   <div class="panel backup-card"><div class="backup-icon">↓</div><h2>Fazer backup</h2><p>Crie um arquivo completo com alunos, responsáveis, telefones, pagamentos, valores, datas e comprovantes.</p><button class="btn primary" id="backupPageBtn">Fazer backup agora</button></div>
+   <div class="panel backup-card"><div class="backup-icon restore-icon">↑</div><h2>Restaurar backup</h2><p>Selecione um arquivo de backup para substituir os dados atuais pelos dados salvos.</p><label class="btn ghost restore-button">Selecionar arquivo<input id="restorePage" type="file" accept=".json"></label></div>
+ </div>
+ <div class="panel backup-info"><b>Importante</b><p>O backup é um arquivo local. Guarde-o em um local seguro e faça cópias periódicas.</p></div>
+</section>
+
+
+</main></div></div>
+
+<dialog id="studentDialog"><form method="dialog" id="studentForm" class="modal student-modal"><div class="modal-head modal-head-modern"><div class="modal-title-wrap"><div class="modal-icon">👤</div><div><span class="eyebrow">CADASTRO DE ALUNO</span><h2 id="studentTitle">Novo aluno</h2><p id="studentModalSubtitle">Preencha os dados principais e os responsáveis.</p></div></div><button type="button" class="x" data-close>×</button></div><input type="hidden" id="studentId"><div class="form"><div class="form-section full"><div class="section-title"><b>Dados do aluno</b><small>Informações principais para identificação.</small></div></div><label>Nome do aluno*<input id="studentName" required maxlength="120"></label><div class="form-section full"><div class="section-title"><b>Responsável principal</b><small>Pessoa responsável pelo pagamento e contato.</small></div></div><label>Nome do responsável*<input id="payerName" required maxlength="120"></label><label>Telefone<input id="payerPhone" inputmode="tel" maxlength="20" placeholder="(00) 00000-0000"></label><div class="full responsibles-box"><div class="responsibles-head"><div><b>Responsáveis adicionais</b><small>Cadastre outras pessoas autorizadas.</small></div><button type="button" class="btn ghost small" id="addResponsible">+ Adicionar responsável</button></div><div id="responsiblesList"></div></div><label class="full">Observação<input id="studentNote" maxlength="250" placeholder="Informações adicionais, se necessário"></label></div><div class="actions"><button type="button" class="btn ghost" data-close>Cancelar</button><button class="btn primary">Salvar aluno</button></div></form></dialog>
+
+<dialog id="paymentDialog"><form method="dialog" id="paymentForm" class="modal"><div class="modal-head"><div><span class="eyebrow">MENSALIDADE</span><h2 id="paymentTitle">Registrar pagamento</h2><p id="paymentSubtitle"></p></div><button type="button" class="x" data-close>×</button></div><input type="hidden" id="paymentStudentId"><input type="hidden" id="paymentMonth"><div class="form"><label class="full">Responsável que realizou o pagamento<select id="payResponsible"></select></label><label>Nome de quem pagou<input id="payName" maxlength="120"></label><label>Telefone<input id="payPhone" inputmode="tel" maxlength="20" placeholder="(00) 00000-0000"></label><label>Valor pago<input id="payAmount" type="number" min="0" step="0.01" placeholder="Ex.: 550,00"></label><label>Data do pagamento<input id="payDate" type="date"></label><label class="full">Comprovante (imagem ou PDF)<input id="payFile" type="file" accept="image/*,.pdf"></label><div class="full" id="currentFile"></div></div><div class="actions"><button type="button" class="btn ghost" data-close>Cancelar</button><button class="btn primary">Salvar pagamento</button></div></form></dialog>
+
+<dialog id="historyDialog"><div class="modal history-modal"><div class="modal-head modal-head-modern"><div class="modal-title-wrap"><div class="modal-icon history-icon">↗</div><div><span class="eyebrow">HISTÓRICO FINANCEIRO</span><h2 id="historyTitle">Histórico do aluno</h2><p>Veja os pagamentos registrados e os valores pagos.</p></div></div><button type="button" class="x" data-close>×</button></div><div id="historyBody" class="history-body"></div><div class="actions"><button type="button" class="btn primary" data-close>Fechar</button></div></div></dialog>
+<script src="app.js"></script>
+
+</body></html>
